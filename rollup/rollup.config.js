@@ -1,11 +1,12 @@
 import commonjs from '@rollup/plugin-commonjs'
 import typescript from '@rollup/plugin-typescript'
 import eslint from '@rollup/plugin-eslint'
-import postcss from 'rollup-plugin-postcss';
-import terser from '@rollup/plugin-terser';
-
-import pkg from '../package.json'
+import postcss from 'rollup-plugin-postcss'
+import terser from '@rollup/plugin-terser'
+import strip from '@rollup/plugin-strip'
 import { isDev } from './utils'
+import pkg from '../package.json'
+
 export default [
   {
     input: 'src/index.ts',
@@ -26,7 +27,10 @@ export default [
       postcss(),
       commonjs({ extensions: ['.js', '.ts'] }),
       typescript(),
-      !isDev && terser()
+      !isDev && terser(),
+      !isDev && strip({
+        include: ['src/**/*.(js|ts)'],
+      })
     ]
   }
 ]
